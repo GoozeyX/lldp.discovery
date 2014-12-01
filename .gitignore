@@ -1,0 +1,9 @@
+# Git Ignore for whisperaven's projects:
+
+# Python:
+__pycache__/
+.*.pyc
+
+# Misc:
+.*.swp
+tz*/
