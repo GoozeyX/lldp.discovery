@@ -1,4 +1,19 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Simple LLDP (Low Level Discovery Protocol) frame capture/parse script,
+    designed by Hao Feng (whisperaven@gmail.com).
+
+    1, Just read the `device name` and `portid` and `vlanid` TLV, but
+        you can add your own parser by using the return value of function
+        `unpack_lldp_frame`.
+    2, Because it uses `socket()` with some Linux Only socket flags, so
+        it should be Only work under linux.
+    3, No python 3 support in mind, just want to get the job done.
+
+    Hope that someone find it useful, but WITHOUT ANY WARRANTY;
+"""
 
 import re
 import sys
