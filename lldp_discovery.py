@@ -72,12 +72,13 @@ SIOCGIFFLAGS = 0x8913   # `G` for Get socket flags
 SIOCSIFFLAGS = 0x8914   # `S` for Set socket flags
 IFF_PROMISC = 0x100     # Enter Promiscuous mode
 
-## C ifreq structure
+
 class ifreq(Structure):
+    """ C-compatible `ifreq` struct """
     _fields_ = [("ifr_ifrn", c_char * 16),
                 ("ifr_flags", c_short)]
 
-## Functions
+
 def detect_netdevs():
     """ Get network interface name/ip, 
             ignore interface with no ip assigned """
@@ -101,6 +102,7 @@ def detect_netdevs():
 
     return netdevs
 
+
 def promiscuous_mode(interface, sock, enable=False):
     """ Enable/Disable NIC promiscuous mode via `ioctl` system call
             with c-compatible `ifreq` struct and `SIOC[G|S]IFFLAGS` """
@@ -115,6 +117,7 @@ def promiscuous_mode(interface, sock, enable=False):
         ifr.ifr_flags &= ~IFF_PROMISC
     ioctl(sock.fileno(), SIOCSIFFLAGS, ifr)
 
+
 def unpack_ethernet_frame(packet):
     """ Unpack ethernet frame """
 
@@ -126,10 +129,12 @@ def unpack_ethernet_frame(packet):
 
     return (eth_header, eth_dest_mac, eth_src_mac, eth_protocol, eth_payload)
 
+
 def covert_hex_string(decimals):
     """ Covert decimals to hex string which start with `0x`, 
             and `strip` by `0x` """
     return [ hex(decimal).strip('0x').rjust(2, '0') for decimal in decimals ]
+
 
 def unpack_lldp_frame(eth_payload):
     """ Unpack lldp frame """
@@ -178,6 +183,7 @@ def exit_handler(signum, frame):
 
     sys.exit(1)
 
+
 def main():
     """ Low Level Discovery Protocol """
 
@@ -207,7 +213,7 @@ def main():
                 promiscuous_mode(interface_name, capture_sock, False)
                 signal.signal(signal.SIGINT, signal.SIG_DFL)
                 signal.signal(signal.SIGALRM, signal.SIG_DFL)
-                signal.signal(0)
+                signal.alarm(0)
 
                 for tlv_parse_rv in unpack_lldp_frame(eth_payload):
 
